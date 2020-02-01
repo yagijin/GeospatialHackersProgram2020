@@ -1,0 +1,149 @@
+@charset "utf-8";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'TsukuARdGothic-Regular','Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'TsukuARdGothic-Regular','Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+}
+
+h1 {
+  margin: 0;
+  color: white;
+}
+
+header {
+  background-color: #698474;
+  height: 15vh;
+  width: 100vw;
+
+  display: flex; 
+  flex-direction: row; 
+  /*justify-content: center; */
+  padding-left: 5%;
+  align-items: center;  
+}
+
+footer {
+  background-color: #698474;
+  height: 15vh;
+  width: 100vw;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.map-box {
+  display: flex; 
+  flex-direction: row; 
+  /*justify-content: center; */
+  align-items: center; 
+}
+
+#map { 
+  height: 70vh;
+  width: 100vw;
+}
+
+.select-form {
+  display: flex; 
+  flex-direction: row; 
+  justify-content: center; 
+  align-items: center;  
+}
+
+.select {
+  margin-right: 10%;
+  margin-left: 10%;
+  width: 80%;
+}
+
+select{
+  outline:none;
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: '';
+  background: #b1cca9;
+  vertical-align: middle;
+  font-size: inherit;
+  appearance: button;
+  appearance: none;
+  height: 40px;
+  padding: 8px 12px;
+  border: none;
+  color: black;
+  width:100%;
+  border-radius:3px;
+}
+
+select option{
+  color: black;
+}
+
+.button-show-parent {
+  display: flex; 
+  flex-direction: row; 
+  /*justify-content: center; */
+  align-items: center;  
+}
+
+.button-show {
+  padding: 10px;
+  width: 50%;
+  border-radius: 10px;
+  border: none;
+  color: #4d4d4d;
+  font-weight: bold;
+  font-size: large;
+  background: #b1cca9;
+}
+
+.button-show:hover{
+  outline: 0;
+  background-color: #a4bd9d;
+}
+
+.button-route-parent {
+  display: flex; 
+  flex-direction: row; 
+  justify-content: center; 
+  align-items: center;  
+}
+
+.button-route {
+  padding: 10px;
+  width: 80%;
+  border-radius: 10px;
+  border: none;
+  background: #b1cca9;
+  color: #4d4d4d;
+  font-size: large;
+  font-weight: bold;
+}
+
+.button-route:hover{
+  outline: 0;
+  background-color: #a4bd9d;
+}
+
+/*
+.leaflet-tile-container {
+    x-filter: sepia(100%) brightness(95%); 
+    x-filter: grayscale(100%) brightness(110%); 
+    filter: hue-rotate(-10deg) saturate(70%) brightness(104%);
+}
+
+.leaflet-marker-pane > a {
+	word-break: break-all;
+}
+a {
+    color: #444 !important;
+}
+*/
+
+

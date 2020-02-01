@@ -1,0 +1,82 @@
+<!DOCTYPE html><!--今回IEの対応は諦めます-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>帰る前にもう一箇所</title>
+    <meta name="description" content="made in GeospatialHackersProgram2020">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/main.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script src="assets/initmap.js"></script>
+    <!--
+    <link rel="stylesheet" href="https://code4fukui.github.io/egmapjs/egmap.css"/>
+    <script src="https://fukuno.jig.jp/fukuno.js"></script>
+    <script src="https://code4fukui.github.io/egmapjs/sparql.js"></script>
+    -->
+
+    <script>//ロード時のスクリプト
+
+      let selectedPoint = [ 35.170915, 136.881537 ]
+
+      function setPoint (lat,lng) {
+        selectedPoint = [lat,lng];
+      }
+    
+      window.onload = function() {
+        let map = initMap('map')
+        map.setZoom(12)
+        map.panTo([ 35.170915,136.881537 ])
+        map.addIcon(35.170915,136.881537, "名古屋駅")
+        map.on("click", (e)=> setPoint(e.latlng.lat,e.latlng.lng))
+      }
+
+      function showclicked () {
+        const index_select = document.form1.selectmenu.selectedIndex;
+        const select_value = document.form1.selectmenu.options[index_select].value;
+        window.alert(select_value);
+      }
+
+      function routeclicked () {
+        const destination = selectedPoint;//[ 35.1563921, 136.9752917 ]
+        const routeURL = "https://www.google.com/maps/dir/?api=1&origin=名古屋駅&destination=" + destination[0] + "," + destination[1];
+        window.open(routeURL);
+      }
+
+    </script>
+
+  </head>
+  <body>
+    <header>
+      <h1>名古屋から帰る前にもう一箇所寄って行きませんか？</h1>
+    </header>
+    <div class="map-box">
+      <div id="map"></div>
+    </div>
+    <footer>
+        <form name="form1" class="select-form">
+          <select name="selectmenu" class="select" id="hey">
+            <option value="15">15分</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+            <option value="60">60分</option>
+            <option value="75">1時間15分</option>
+            <option value="90">1時間30分</option>
+            <option value="105">1時間45分</option>
+            <option value="120">2時間</option>
+            <option value="135">2時間15分</option>
+            <option value="150">2時間30分</option>
+            <option value="165">2時間45分</option>
+            <option value="180">3時間</option>
+          </select>
+        </form>
+      <div class="button-show-parent">
+        <button class="button-show" onclick="showclicked()">見る</button>
+      </div>
+      <div class="button-route-parent">
+        <button class="button-route" onclick="routeclicked()">経路</button>
+      </div>
+    </footer>
+  </body>
+</html>
