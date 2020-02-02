@@ -41,7 +41,7 @@
         // アイコン
         map.iconlayer = L.layerGroup()
         map.iconlayer.addTo(map)
-        map.addIcon = function(lat, lng, nameorparam, iconurl, iconwidth, iconheight, zIndex) {
+        map.addIcon = function(lat, lng, nameorparam, iconurl, iconwidth, iconheight, zIndex, opa) {
           let name = null
           if (typeof nameorparam == "string") {
             name = nameorparam
@@ -64,7 +64,8 @@
             marker = L.marker([ lat, lng ], {
               title : name,
               icon : icon,
-              zIndexOffset: zIndex
+              zIndexOffset: zIndex,
+              opacity: opa
             })
           } else {
             marker = L.marker([ lat, lng ], { title: name })
@@ -95,7 +96,7 @@
 
       function setSpot(data) {
         for(let i=0;i<data.length;i++){
-          map.addIcon(data[i].lat, data[i].lng, data[i].name+"<br/>"+data[i].description, "assets/pin.png", 30, 30, 10000)
+          map.addIcon(data[i].lat, data[i].lng, data[i].name+"<br/>"+data[i].description, "assets/pin.png", 30, 30, 10000,0.8)
         }
       }
 
@@ -135,13 +136,16 @@
         .then(function () {
         });
 
+        map.addIcon(35.170915, 136.881537, "名古屋駅<br/>出発地点", "assets/station.png", 45, 45, 20000, 1);
+
         for(let i=0;i<nagoyaMap.features.length;i++){
           let a_lat = nagoyaMap.features[i].properties.lat;
           let a_lng = nagoyaMap.features[i].properties.lng;
           let a_name = nagoyaMap.features[i].properties.address;
 
           let money = Math.round(((nagoyaMap.features[i].properties.trainfare + 300)/950) * 30);
-          markerOld[i] = map.addIcon(a_lat,a_lng, a_name+"<br/>往復"+nagoyaMap.features[i].properties.trainfare*2 + "円",iconName(nagoyaMap.features[i].properties.totaltime),money,money,1000);
+          let text = "往復時間：" + "徒歩" +　nagoyaMap.features[i].properties.walktime*2 + "+電車" + nagoyaMap.features[i].properties.traintime*2 + "=" + (nagoyaMap.features[i].properties.walktime*2 + nagoyaMap.features[i].properties.traintime*2)+ "分<br/>";
+          markerOld[i] = map.addIcon(a_lat,a_lng, text + "金額（往復）："+nagoyaMap.features[i].properties.trainfare*2+"円<br/>"+a_name+"<br/>",iconName(nagoyaMap.features[i].properties.totaltime),money,money,1000,0.3);
         }
         map.on("click", (e)=> setPoint(e.latlng.lat,e.latlng.lng))
       }
@@ -165,7 +169,8 @@
         markerOld = [];
         for(let i=0;i<nagoyaMap.data.length;i++){
           let money = Math.round(((nagoyaMap.data[i].trainfare + 300)/950) * 30);
-          markerOld[i] = map.addIcon(nagoyaMap.data[i].lat, nagoyaMap.data[i].lng, nagoyaMap.data[i].address+"<br/>往復"+nagoyaMap.data[i].trainfare*2 + "円", iconName(nagoyaMap.data[i].totaltime), money ,money, 1000);
+          let text = "往復時間：" + "徒歩" +　nagoyaMap.data[i].walktime*2 + "+電車" + nagoyaMap.data[i].traintime*2 + "=" + (nagoyaMap.data[i].walktime*2 + nagoyaMap.data[i].traintime*2)+ "分<br/>";
+          markerOld[i] = map.addIcon(nagoyaMap.data[i].lat, nagoyaMap.data[i].lng, text + "金額（往復）："+nagoyaMap.data[i].trainfare*2+"円<br/>" + nagoyaMap.data[i].address, iconName(nagoyaMap.data[i].totaltime), money ,money, 1000,0.3);
         }
       }
 
