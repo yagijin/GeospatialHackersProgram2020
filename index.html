@@ -21,8 +21,9 @@
 
       let selectedPoint = [ 35.170915, 136.881537 ];
       let nagoyaMap = {};
-      let markerOld = []; 
+      let markerOld = [];
       let map;
+      let ngrokURL = "https://d80cdc47.ngrok.io/";
 
       function setPoint (lat,lng) {
         selectedPoint = [lat,lng];
@@ -40,7 +41,7 @@
         // アイコン
         map.iconlayer = L.layerGroup()
         map.iconlayer.addTo(map)
-        map.addIcon = function(lat, lng, nameorparam, iconurl, iconwidth, iconheight) {
+        map.addIcon = function(lat, lng, nameorparam, iconurl, iconwidth, iconheight, zIndex) {
           let name = null
           if (typeof nameorparam == "string") {
             name = nameorparam
@@ -63,6 +64,7 @@
             marker = L.marker([ lat, lng ], {
               title : name,
               icon : icon,
+              zIndexOffset: zIndex
             })
           } else {
             marker = L.marker([ lat, lng ], { title: name })
@@ -91,14 +93,20 @@
           return map
         }
 
+      function setSpot(data) {
+        for(let i=0;i<data.length;i++){
+          map.addIcon(data[i].lat, data[i].lng, data[i].name+"<br/>"+data[i].description, "assets/pin.png", 30, 30, 10000)
+        }
+      }
+
       function iconName(timeTo){
         timeTo = Math.floor(timeTo / 10) + 1;
         if(timeTo>6){
           timeTo=6;
         }
-        return "assets/mapicon-" + timeTo + ".png";
+        return "assets/icon" + timeTo + ".png";
       }
-    
+
       window.onload = async function() {
 
           await axios.get('assets/reach_difficulty.geojson')
@@ -116,19 +124,31 @@
         map.setZoom(12)
         map.panTo([ 35.1546144, 136.9323453 ])
 
+        await axios.get(ngrokURL + "spot")
+        .then(function (response) {
+          console.log(response);
+          setSpot(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+        });
+
         for(let i=0;i<nagoyaMap.features.length;i++){
           let a_lat = nagoyaMap.features[i].properties.lat;
           let a_lng = nagoyaMap.features[i].properties.lng;
           let a_name = nagoyaMap.features[i].properties.address;
 
-          markerOld[i] = map.addIcon(a_lat,a_lng, a_name,iconName(nagoyaMap.features[i].properties.totaltime),16);
+          let money = Math.round(((nagoyaMap.features[i].properties.trainfare + 300)/950) * 30);
+          markerOld[i] = map.addIcon(a_lat,a_lng, a_name+"<br/>往復"+nagoyaMap.features[i].properties.trainfare*2 + "円",iconName(nagoyaMap.features[i].properties.totaltime),money,money,1000);
         }
         map.on("click", (e)=> setPoint(e.latlng.lat,e.latlng.lng))
       }
 
       async function limitMap(select_value) {
 
-        await axios.get('https://d80cdc47.ngrok.io/query?freetime='+ select_value)
+        await axios.get(ngrokURL + 'query?freetime='+ select_value)
         .then(function (response) {
           console.log(response);
           nagoyaMap = response;
@@ -144,7 +164,8 @@
         }
         markerOld = [];
         for(let i=0;i<nagoyaMap.data.length;i++){
-          markerOld[i] = map.addIcon(nagoyaMap.data[i].lat, nagoyaMap.data[i].lng, nagoyaMap.data[i].address, iconName(nagoyaMap.data[i].totaltime),16);
+          let money = Math.round(((nagoyaMap.data[i].trainfare + 300)/950) * 30);
+          markerOld[i] = map.addIcon(nagoyaMap.data[i].lat, nagoyaMap.data[i].lng, nagoyaMap.data[i].address+"<br/>往復"+nagoyaMap.data[i].trainfare*2 + "円", iconName(nagoyaMap.data[i].totaltime), money ,money, 1000);
         }
       }
 
