@@ -2,10 +2,9 @@ let initMap = function(mapid) {
 	let map = L.map(mapid)
 
 	//L.tileLayer("https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", {
-  //ライセンス的にテスト用のみで，自前APPなどにするときは自分でタイルサーバを立てる必要あり
-  L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-		/*attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>"',*/
-		maxZoom: 12,
+  L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+		attribution: '<a >© OpenStreetMap contributors</a>',
+		maxZoom: 16,
 	}).addTo(map);
 	
 	// アイコン

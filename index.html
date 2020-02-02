@@ -9,7 +9,8 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
-    <script src="assets/initmap.js"></script>
+    <!--<script src="assets/initmap.js"></script>-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!--
     <link rel="stylesheet" href="https://code4fukui.github.io/egmapjs/egmap.css"/>
     <script src="https://fukuno.jig.jp/fukuno.js"></script>
@@ -18,24 +19,139 @@
 
     <script>//ロード時のスクリプト
 
-      let selectedPoint = [ 35.170915, 136.881537 ]
+      let selectedPoint = [ 35.170915, 136.881537 ];
+      let nagoyaMap = {};
+      let markerOld = []; 
+      let map;
 
       function setPoint (lat,lng) {
         selectedPoint = [lat,lng];
       }
+
+      let initMap = function(mapid) {
+        let map = L.map(mapid)
+
+        //L.tileLayer("https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png", {
+        L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+          attribution: '<a >© OpenStreetMap contributors</a>',
+          maxZoom: 16,
+        }).addTo(map);
+        
+        // アイコン
+        map.iconlayer = L.layerGroup()
+        map.iconlayer.addTo(map)
+        map.addIcon = function(lat, lng, nameorparam, iconurl, iconwidth, iconheight) {
+          let name = null
+          if (typeof nameorparam == "string") {
+            name = nameorparam
+          } else if (nameorparam.name) {
+            name = nameorparam.name
+          }
+          let marker = null
+          if (iconurl) {
+            if (!iconwidth) {
+              iconwidth = 32
+            }
+            if (!iconheight) {
+              iconheight = iconwidth
+            }
+            var icon = L.icon({
+              iconUrl: iconurl,
+              iconSize: [ iconwidth, iconheight ],
+              iconAnchor: [ iconwidth / 2, iconheight / 2 ]
+            })
+            marker = L.marker([ lat, lng ], {
+              title : name,
+              icon : icon,
+            })
+          } else {
+            marker = L.marker([ lat, lng ], { title: name })
+          }
+          if (typeof nameorparam == "function") {
+            marker.on("click", function(e) {
+              nameorparam(e, name)
+            });
+          } else {
+            marker.bindPopup(
+              "<h2>" + name + "</h2>",
+              {
+                maxWidth: 500
+              }
+            );
+            marker.on("click", function(e) {
+              setPoint(e.latlng.lat, e.latlng.lng);
+              console.log(e.latlng.lat + e.latlng.lng);
+              if (nameorparam && nameorparam.callback)
+                nameorparam.callback(e, name)
+            });
+          }
+          this.iconlayer.addLayer(marker);
+          return marker
+          }
+          return map
+        }
+
+      function iconName(timeTo){
+        timeTo = Math.floor(timeTo / 10) + 1;
+        if(timeTo>6){
+          timeTo=6;
+        }
+        return "assets/mapicon-" + timeTo + ".png";
+      }
     
-      window.onload = function() {
-        let map = initMap('map')
+      window.onload = async function() {
+
+          await axios.get('assets/reach_difficulty.geojson')
+          .then(function (response) {
+            console.log(response.data.features);
+            nagoyaMap = response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+          });
+
+        map = initMap('map')
         map.setZoom(12)
-        map.panTo([ 35.170915,136.881537 ])
-        map.addIcon(35.170915,136.881537, "名古屋駅")
+        map.panTo([ 35.1546144, 136.9323453 ])
+
+        for(let i=0;i<nagoyaMap.features.length;i++){
+          let a_lat = nagoyaMap.features[i].properties.lat;
+          let a_lng = nagoyaMap.features[i].properties.lng;
+          let a_name = nagoyaMap.features[i].properties.address;
+
+          markerOld[i] = map.addIcon(a_lat,a_lng, a_name,iconName(nagoyaMap.features[i].properties.totaltime),16);
+        }
         map.on("click", (e)=> setPoint(e.latlng.lat,e.latlng.lng))
+      }
+
+      async function limitMap(select_value) {
+
+        await axios.get('https://d80cdc47.ngrok.io/query?freetime='+ select_value)
+        .then(function (response) {
+          console.log(response);
+          nagoyaMap = response;
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+        });
+
+        for(let j=0;j<markerOld.length;j++){
+          map.removeLayer(markerOld[j]);
+        }
+        markerOld = [];
+        for(let i=0;i<nagoyaMap.data.length;i++){
+          markerOld[i] = map.addIcon(nagoyaMap.data[i].lat, nagoyaMap.data[i].lng, nagoyaMap.data[i].address, iconName(nagoyaMap.data[i].totaltime),16);
+        }
       }
 
       function showclicked () {
         const index_select = document.form1.selectmenu.selectedIndex;
         const select_value = document.form1.selectmenu.options[index_select].value;
-        window.alert(select_value);
+        limitMap(select_value);
       }
 
       function routeclicked () {
@@ -69,6 +185,15 @@
             <option value="150">2時間30分</option>
             <option value="165">2時間45分</option>
             <option value="180">3時間</option>
+            <option value="195">3時間以上</option>
+<!--           <option value="210">3時間30分</option>
+            <option value="225">3時間45分</option>
+            <option value="240">4時間</option>
+            <option value="255">4時間15分</option>
+            <option value="270">4時間30分</option>
+            <option value="285">4時間45分</option>
+            <option value="300">5時間</option>
+-->
           </select>
         </form>
       <div class="button-show-parent">
