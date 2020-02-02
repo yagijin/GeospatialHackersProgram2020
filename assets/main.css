@@ -17,6 +17,27 @@ h1 {
   color: white;
 }
 
+footer {
+  background-color: #698474;
+  height: 15vh;
+  width: 100vw;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+@media screen and (max-width:768px) {
+  h1 {
+    font-size: small;
+  }
+
+  footer {
+    grid-template-columns: 2fr 2fr 1fr;
+  }
+
+}
+
 header {
   background-color: #698474;
   height: 15vh;
@@ -26,15 +47,6 @@ header {
   flex-direction: row; 
   justify-content: center;
   align-items: center;  
-}
-
-footer {
-  background-color: #698474;
-  height: 15vh;
-  width: 100vw;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .map-box {
