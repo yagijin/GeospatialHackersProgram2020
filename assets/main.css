@@ -143,19 +143,3 @@ select option{
   background-color: #a4bd9d;
 }
 
-/*
-.leaflet-tile-container {
-    x-filter: sepia(100%) brightness(95%); 
-    x-filter: grayscale(100%) brightness(110%); 
-    filter: hue-rotate(-10deg) saturate(70%) brightness(104%);
-}
-
-.leaflet-marker-pane > a {
-	word-break: break-all;
-}
-a {
-    color: #444 !important;
-}
-*/
-
-
