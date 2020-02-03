@@ -9,7 +9,7 @@ function setPoint (lat,lng) {
 }
 
 //Mapの初期化
-let initMap = function(mapid) {
+const initMap = function(mapid) {
   let map = L.map(mapid);
   //ライセンス上Attributeに© OpenStreetMap contributorsを明記する
   L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
@@ -35,7 +35,7 @@ let initMap = function(mapid) {
       if (!iconheight) {
         iconheight = iconwidth
       }
-      let icon = L.icon({
+      const icon = L.icon({
         iconUrl: iconurl,
         iconSize: [ iconwidth, iconheight ],
         iconAnchor: [ iconwidth / 2, iconheight / 2 ]
@@ -106,13 +106,13 @@ window.onload = async function() {
   map.addIcon(35.170915, 136.881537, "名古屋駅<br/>出発地点", "assets/station.png", 45, 45, 20000, 1);
 
   for(let i=0;i<nagoyaMap.features.length;i++){
-    let rootProp = nagoyaMap.features[i].properties;
-    let a_lat = rootProp.lat;
-    let a_lng = rootProp.lng;
-    let a_name = rootProp.address;
+    const rootProp = nagoyaMap.features[i].properties;
+    const a_lat = rootProp.lat;
+    const a_lng = rootProp.lng;
+    const a_name = rootProp.address;
 
-    let money = Math.round(((rootProp.trainfare + 300)/950) * 30);
-    let text = "往復時間：" + "徒歩" +　rootProp.walktime*2 + "+電車" + rootProp.traintime*2 + "=" + (rootProp.walktime*2 + rootProp.traintime*2)+ "分<br/>";
+    const money = Math.round(((rootProp.trainfare + 300)/950) * 30);
+    const text = "往復時間：" + "徒歩" +　rootProp.walktime*2 + "+電車" + rootProp.traintime*2 + "=" + (rootProp.walktime*2 + rootProp.traintime*2)+ "分<br/>";
     markerOld[i] = map.addIcon(a_lat,a_lng, text + "金額（往復）："+rootProp.trainfare*2+"円<br/>"+a_name+"<br/>",iconName(rootProp.totaltime),money,money,1000,0.3);
   }
 
@@ -141,9 +141,9 @@ async function limitMap(select_value) {
     }
     markerOld = [];
     for(let i=0;i<nagoyaMap.data.length;i++){
-      let rootProp = nagoyaMap.data[i];
-      let money = Math.round(((rootProp.trainfare + 300)/950) * 30);
-      let text = "往復時間：" + "徒歩" +　rootProp.walktime*2 + "+電車" + rootProp.traintime*2 + "=" + (rootProp.walktime*2 + rootProp.traintime*2)+ "分<br/>";
+      const rootProp = nagoyaMap.data[i];
+      const money = Math.round(((rootProp.trainfare + 300)/950) * 30);
+      const text = "往復時間：" + "徒歩" +　rootProp.walktime*2 + "+電車" + rootProp.traintime*2 + "=" + (rootProp.walktime*2 + rootProp.traintime*2)+ "分<br/>";
       markerOld[i] = map.addIcon(rootProp.lat, rootProp.lng, text + "金額（往復）："+rootProp.trainfare*2+"円<br/>" + rootProp.address, iconName(rootProp.totaltime), money ,money, 1000,0.3);
     }
   })

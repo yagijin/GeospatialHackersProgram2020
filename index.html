@@ -27,7 +27,7 @@
             <option value="195">3時間以上</option>
             <script>
               for(let i=180;i>0;i-=15){
-                let hour = Math.floor(i/60);
+                const hour = Math.floor(i/60);
                 function text_s(text){ document.write(text); }
                 (hour===0)?text_s('<option value="'+i+'">'+i+'分</option>'):(i%60===0)?text_s('<option value="'+i+'">'+hour+'時間</option>'):text_s('<option value="'+i+'">'+hour+"時間"+i%60+'分</option>');
               }
