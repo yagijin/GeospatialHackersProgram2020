@@ -2,5 +2,4 @@
 
 GeospatialHackersProgram2020にて作成．  
 名古屋駅からの到達難易度マップ．  
-<img width="1435" alt="スクリーンショット 2020-02-02 16 53 06" src="https://user-images.githubusercontent.com/29916489/73608142-6cf38900-4602-11ea-9a9e-e6a9361efeea.png">
-
+![スクリーンショット 2020-02-03 15 31 15](https://user-images.githubusercontent.com/29916489/73630723-43863c00-469a-11ea-965b-c44361fadb0c.png)
