@@ -3,6 +3,7 @@ let nagoyaMap = {};
 let markerOld = [];
 let map;
 let serverURL = "http://ghp2019.netawosi.com/";//ここにAPIサーバのルートアドレス
+let limit = 0;
 
 function setPoint (lat,lng) {
   selectedPoint = [lat,lng];
@@ -88,7 +89,6 @@ function iconName(timeTo){
 
 //ウィンドウロード時にマップを描画する関数
 window.onload = async function() {
-
   await axios.get('assets/reach_difficulty.geojson')
   .then(function (response) {
     nagoyaMap = response.data;
@@ -100,7 +100,7 @@ window.onload = async function() {
   });
 
   map = initMap('map');
-  map.setZoom(12);
+  map.setZoom((768>=window.innerWidth)?11:12);
   map.panTo([ 35.1546144, 136.9323453 ]);
   map.on("click", (e)=> setPoint(e.latlng.lat,e.latlng.lng));
   map.addIcon(35.170915, 136.881537, "名古屋駅<br/>出発地点", "assets/station.png", 45, 45, 20000, 1);
@@ -132,7 +132,7 @@ window.onload = async function() {
 //指定された時間で到達できる範囲まで絞ったMapを描画
 async function limitMap(select_value) {
   //APIサーバからデータを取得する
-  await axios.get(serverURL + 'query?freetime='+ select_value)
+  await axios.get(serverURL + 'query?freetime='+ select_value + '&limit=' + limit)
   .then(function (response) {
     console.log(response);
     nagoyaMap = response;
@@ -169,3 +169,10 @@ function routeclicked () {
   const routeURL = "https://www.google.com/maps/dir/?api=1&origin=名古屋駅&destination=" + destination[0] + "," + destination[1];
   window.open(routeURL);
 }
+
+// Update the current slider value (each time you drag the slider handle)
+function sliderdraged() {
+  limit= document.getElementById("myRange").value;
+}
+
+function text_s(text){ document.write(text); }

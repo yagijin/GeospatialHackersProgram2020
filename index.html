@@ -21,19 +21,24 @@
       <div id="map"></div>
     </div>
     <footer>
-        <form name="form1" class="select-form">
-          <!--ここの要素の繰り返しをなんとかしたい-->
-          <select name="selectmenu" class="select" id="hey">
-            <option value="195">3時間以上</option>
-            <script>
-              for(let i=180;i>0;i-=15){
-                const hour = Math.floor(i/60);
-                function text_s(text){ document.write(text); }
-                (hour===0)?text_s('<option value="'+i+'">'+i+'分</option>'):(i%60===0)?text_s('<option value="'+i+'">'+hour+'時間</option>'):text_s('<option value="'+i+'">'+hour+"時間"+i%60+'分</option>');
-              }
-            </script>
-          </select>
-        </form>
+      <form name="form1" class="select-form">
+        <select name="selectmenu" class="select" id="hey">
+          <option value="195">3時間以上</option>
+          <script>
+            for(let i=180;i>0;i-=15){
+              const hour = Math.floor(i/60);
+              (hour===0)?text_s('<option value="'+i+'">'+i+'分</option>'):(i%60===0)?text_s('<option value="'+i+'">'+hour+'時間</option>'):text_s('<option value="'+i+'">'+hour+"時間"+i%60+'分</option>');
+            }
+          </script>
+        </select>
+        <div class="slider-parent">
+          <div class="slider-text slider-text-left">MIN</div>
+          <div class="slidecontainer">
+            <input type="range" min="1" max="1317" value="1317" class="slider" id="myRange" oninput="sliderdraged()">
+          </div>
+          <div class="slider-text slider-text-right">MAX</div>
+        </div>
+      </form>
       <div class="button-show-parent">
         <button class="button-show" onclick="showclicked()">見る</button>
       </div>
