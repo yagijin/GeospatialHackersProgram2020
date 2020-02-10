@@ -2,7 +2,7 @@ let selectedPoint = [ 35.170915, 136.881537 ];
 let nagoyaMap = {};
 let markerOld = [];
 let map;
-let serverURL = "https://##########/";//ここにAPIサーバのルートアドレス
+let serverURL = "http://ghp2019.netawosi.com/";//ここにAPIサーバのルートアドレス
 
 function setPoint (lat,lng) {
   selectedPoint = [lat,lng];
